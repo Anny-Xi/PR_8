@@ -5,5 +5,5 @@ const model = new ChatOpenAI({
     azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
     azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
 })
-const joke = await model.invoke("Tell me a Javascript joke!")
+const joke = await model.invoke("I want a other balanced meal and also give me how many gram each meal would be and calorie!")
 console.log(joke.content)
