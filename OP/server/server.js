@@ -4,9 +4,24 @@ import express from 'express';
 // communicatie met GPT
 import { ChatOpenAI } from "@langchain/openai"
 
+const messages = [
+    ["system", "You are dietitian. You knows how to make balanced and delicious meal, you will give people advice as they require, but when they wants unhealthy food, you will also give advice to build a healthy meal with unhealthy food. Please give advice in the original language the request is sent:"],
+    ["human", "I want to have some chicken nuggets for the dinner, can you give me some advice"],
+    ["ai", "I would recommend to put some tuna salade aside the nuggets, also have some hummus as dipping. if you want guide to prepare the salade, I will help you with it.  "]
+];
+
+
+const model = new ChatOpenAI({
+    azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+    azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
+    azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
+    azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
+})
+
+
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -16,41 +31,38 @@ app.use(function (req, res, next) {
     next();
 });
 
+
+console.log("hello world");
+
+console.log(process.env.AZURE_OPENAI_API_KEY);
+
+
 app.get('/chat', (req, res) => {
     console.log("ai");
     res.send('Hello my CHAT gpt');
 })
 
-app.get('/joke', async (req, res) => {
-    res.header('Access-Control-Allow-Headers', '*');
-    res.header('Access-Control-Allow-Origin', '*');
-
-    console.log("message");
-
-    const acceptedType = req.accepts('json');
-
-    if (!acceptedType) {
-        res.status(400).json({message: 'Not Acceptable'});
-        return;
-    }
-    try {
-        res.status(200).json(`here is the joke ${joke.content}`);
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
-})
 
 app.post('/', async (req, res) => {
-    const {prompt} = req.body; // Destructure only required fields
+    // const prompt = req.body.prompt;
+    const advice = req.body.advice;// Destructure only required fields
+
+    async function callOpenAI(advice) {
+        messages.push(["human", advice]);
+        const reply = await model.invoke(messages)
+        messages.push(["ai", reply.content]);
+
+        console.log(messages)
+        console.log(reply.content)
+        res.json({ai:reply.content})
+    }
 
     try {
         // Validate incoming data
-        if (!prompt) {
+        if (!advice) {
             return res.status(400).json({message: 'give us your require please'});
         }
-
-        const answer = await model.invoke(prompt)
-        res.status(201).json(answer);
+        callOpenAI(advice)
 
     } catch (error) {
         console.log(error.message);
@@ -63,19 +75,9 @@ app.listen(process.env.PORT, () => {
     console.log(`Server listening on Port ${process.env.PORT}`);
 })
 
-console.log("hello world");
-
-console.log(process.env.AZURE_OPENAI_API_KEY);
 
 
 
 
-const model = new ChatOpenAI({
-    azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
-    azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
-    azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
-    azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
-})
-// const joke = await model.invoke("I want a other balanced meal and also give me how many gram each meal would be and calorie!")
-const joke = await model.invoke("Tell me a programmer joke")
-// console.log(joke.content)
+
+

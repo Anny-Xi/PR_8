@@ -5,10 +5,23 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script defer src="./main.js" type="module"></script>
+    <script defer src="script.js" type="module"></script>
+    <link rel="stylesheet" href="">
+    <title>Food ai</title>
 </head>
 <body>
-
+<main>
+    <section class="header">
+        <h1> Dit is een ai voor advies om te gaan koken.</h1>
+        <div class="form">
+            <form id="request">
+                <label for="question">Question:</label><br>
+                <input type="text" id="question" name="question" placeholder="please send here your request"><br>
+                <button class="button" type="submit" value="submit" id="submit"> ask advice </button>
+            </form>
+        </div>
+        <div id="ai-output"></div>
+    </section>
+</main>
 </body>
 </html>
