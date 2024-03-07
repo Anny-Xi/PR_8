@@ -1,50 +1,59 @@
 const uri = "http://localhost:8000/";
-const output = document.getElementById("ai-output");
+const output = document.getElementById("output");
 const input = document.getElementById("question");
-const aiOutput = document.getElementById("ai-output")
+const askButton = document.getElementById("ask-advice")
 
 
-document.querySelector('form').addEventListener('submit', async function(event) {
+document.querySelector('form').addEventListener('submit', async function (event) {
     event.preventDefault();
-    console.log("hello1");
+    // console.log("hello1");
 
-    
-        try {
-            const response = await fetch(uri, {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "advice": input.value,
-                    // "prompt": human_prompt.value,//additional for second input
-                }),
-            });
-            //
-            // if (!response.ok) {
-            //     throw new Error("Failed to fetch data");
-            // }
+    let question = document.createElement('p');
+    question.classList.add("question")
+    question.innerHTML = input.value;
+    output.appendChild(question);
 
-            console.log("sending request")
+    try {
+        const response = await fetch(uri, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "advice": input.value,
+                // "prompt": human_prompt.value,//additional for second input
+            }),
+        });
 
-            const data = await response.json();
-            const reply = data.ai;
 
-            let newResponse = document.createElement('div');
-            let answer = document.createElement('p');
+        console.log("sending request")
 
-            answer.innerHTML = reply;
+        const data = await response.json();
+        // askButton.style.visibility = 'visible';
+        //
+        // if (!data){
+        //     askButton.style.visibility = 'hidden';
+        // }else {
+        //     askButton.style.visibility = 'visible';
+        // }
 
-            newResponse.appendChild(answer);
+        const reply = data.ai;
 
-            output.appendChild(newResponse);
+        let newResponse = document.createElement('div');
+        newResponse.classList.add("response")
+        let answer = document.createElement('p');
+        answer.classList.add("answer")
 
-        } catch (error) {
-            console.error("Error occurred while fetching data:", error);
-        }
+        answer.innerHTML = reply;
 
-        console.log("hello 2")
+        newResponse.appendChild(answer);
+
+        output.appendChild(newResponse);
+
+    } catch (error) {
+        console.error("Error occurred while fetching data:", error);
+    }
 
 
 })
