@@ -1,41 +1,99 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script defer src="script.js" type="module"></script>
+    <script src="speak.js" type="module"></script>
+    <!-- <script src="voiceRecognition.js" type="module"></script> -->
     <link rel="stylesheet" href="style.css">
     <title>Food ai</title>
 </head>
+
 <body>
-<main>
-    <section class="header">
-        <h1> 🥬 Your personal food guide 🌮</h1>
-    </section>
+    <main>
+        <section class="header">
+            <h1> 🥬 Your personal food guide 🌮</h1>
+        </section>
 
-    <section class="content">
-        
-        <div id="output">
-            <div class="info">
-                <p>
-                    You can ask this ai for food advice and recipe: <br/>
-                    For example :
-                    I want to eat meat
-                </p>
+        <section class="content">
+
+            <div id="output">
+                <div class="info">
+                    <p>
+                        You can ask this ai for food advice and recipe: <br />
+                        For example :
+                        I want to eat meat
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div id="loading"></div>
-        <div class="form">
-            <form id="request">
-                <textarea id="input" name="input" placeholder="please fill in your question" rows="5" cols="10" wrap="soft"> </textarea>
-                <button class="button" type="submit" value="submit" id="ask-advice">Ask advice</button>
-            </form>
-        </div>
-        
-    </section>
-</main>
+            <div id="loading"></div>
+            <div class="form">
+                <form id="request">
+                    <textarea id="input" name="input" placeholder="please fill in your question" rows="5" cols="10"
+                        wrap="soft"> </textarea>
+                    <button class="button" type="submit" value="submit" id="ask-advice">Ask advice</button>
+                </form>
+            </div>
+
+            <div class="speak">
+                <form id="test">
+                    <label for="txt">Enter text</label>
+                    <input id="txt" type="text" class="txt" />
+                    <div>
+                        <label for="rate">Rate</label><input type="range" min="0.5" max="2" value="1" step="0.1"
+                            id="rate" />
+                        <div class="rate-value">1</div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div>
+                        <label for="pitch">Pitch</label><input type="range" min="0" max="2" value="1" step="0.1"
+                            id="pitch" />
+                        <div class="pitch-value">1</div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <select></select>
+                    <div class="controls">
+                        <button id="play" type="submit">Play</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="voice">
+                <button id="startButton">Start Voice Input</button>
+                <div id="output"></div>
+            </div>
+
+            <script>
+                const startButton = document.getElementById('startButton');
+                const outputDiv = document.getElementById('output');
+
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+                recognition.lang = 'en-US';
+
+                recognition.onstart = () => {
+                    startButton.textContent = 'Listening...';
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    outputDiv.textContent = transcript;
+                };
+
+                recognition.onend = () => {
+                    startButton.textContent = 'Start Voice Input';
+                };
+
+                startButton.addEventListener('click', () => {
+                    recognition.start();
+                });
+            </script>
+        </section>
+    </main>
 </body>
+
 </html>

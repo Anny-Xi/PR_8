@@ -4,6 +4,7 @@ const input = document.getElementById("input");
 const askButton = document.getElementById("ask-advice");
 const loading = document.getElementById("loading");
 
+
 function displayLoading() {
     loading.classList.add("display");
     // To stop loading after some time
@@ -17,8 +18,7 @@ function hideLoading() {
     loading.classList.remove("display");
 }
 
-
-document.querySelector('form').addEventListener('submit', async function (e) {
+document.getElementById("request").addEventListener('submit', async function (e) {
     e.preventDefault();
     // console.log("hello1");
 
@@ -78,3 +78,6 @@ document.querySelector('form').addEventListener('submit', async function (e) {
         askButton.disabled = false;
     }
 })
+
+
+
