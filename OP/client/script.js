@@ -1,15 +1,15 @@
 const uri = "http://localhost:8000/";
 const output = document.getElementById("output");
-const input = document.getElementById("question");
+const input = document.getElementById("input");
 const askButton = document.getElementById("ask-advice");
 const loading = document.getElementById("loading");
 
 function displayLoading() {
     loading.classList.add("display");
-    // to stop loading after some time
+    // To stop loading after some time
     setTimeout(() => {
         loading.classList.remove("display");
-    }, 5000);
+    }, 10000);
 }
 
 // hiding loading 
@@ -22,15 +22,19 @@ document.querySelector('form').addEventListener('submit', async function (e) {
     e.preventDefault();
     // console.log("hello1");
 
-
-    // Disable the button
+    // Disable the button after submit
     askButton.disabled = true;
 
+    let questInput = document.createElement('div');
+    questInput.classList.add("input");
 
     let question = document.createElement('p');
     question.classList.add("question");
     question.innerHTML = input.value;
-    output.appendChild(question);
+
+    questInput.appendChild(question);
+
+    output.appendChild(questInput);
 
     displayLoading();
 
@@ -70,7 +74,7 @@ document.querySelector('form').addEventListener('submit', async function (e) {
     } catch (error) {
         console.error("Error occurred while fetching data:", error);
     } finally {
-        // Enable the button after request completes (whether success or error)
+        // Enable button after try and catch 
         askButton.disabled = false;
     }
 })
