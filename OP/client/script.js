@@ -70,6 +70,15 @@ document.getElementById("request").addEventListener('submit', async function (e)
 
         output.appendChild(newResponse);
 
+        speakText(answer.textContent);
+
+        function speakText(text) {
+            var speech = new SpeechSynthesisUtterance();
+            speech.text = text;
+            window.speechSynthesis.speak(speech);
+        }
+
+
     } catch (error) {
         console.error("Error occurred while fetching data:", error);
     } finally {
