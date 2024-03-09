@@ -4,6 +4,8 @@ import express from 'express';
 // communicatie met GPT
 import { ChatOpenAI } from "@langchain/openai"
 
+const controller = new AbortController();
+
 const messages = [
     ["system", "You are dietitian. You knows how to make balanced and delicious meal. You will give people advice as they require, but when they wants unhealthy food, you will also give advice to build a healthy meal with unhealthy food. You will also tell them how much calorie the food contains. You will also log what the person eat and calculate the calories. If you get empty spaces send, you will ask if they can send their question. Please give advice in the original language the request is sent."],
     ["human", "I want to have some chicken nuggets for the dinner, can you give me some advice"],
@@ -21,7 +23,7 @@ const model = new ChatOpenAI({
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -42,6 +44,11 @@ app.post('/', async (req, res) => {
     const advice = req.body.advice;// Destructure only required fields
 
     async function callOpenAI(advice) {
+        
+        setTimeout(() => {
+            controller.abort();
+        }, 3000);
+
         messages.push(["human", advice]);
         const reply = await model.invoke(messages) // await must be there
 
@@ -51,19 +58,20 @@ app.post('/', async (req, res) => {
 
         console.log(messages)
         console.log(reply.content)
-        res.json({ai:reply.content})
+        res.json({ ai: reply.content })
     }
 
     try {
         // Validate incoming data
         if (!advice) {
-            return res.status(400).json({message: 'give us your require please'});
+            return res.status(400).json({ message: 'give us your require please' });
         }
+    
         callOpenAI(advice)
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 
