@@ -1,41 +1,17 @@
 const uri = "http://localhost:8000/";
 const output = document.getElementById("output");
-const input = document.getElementById("input");
-const askButton = document.getElementById("ask-advice");
-const loading = document.getElementById("loading");
+const input = document.getElementById("question");
+const askButton = document.getElementById("ask-advice")
 
-//loading function
-function displayLoading() {
-    loading.classList.add("display");
-    // To stop loading after some time
-    setTimeout(() => {
-        loading.classList.remove("display");
-    }, 10000);
-}
-// hiding loading 
-function hideLoading() {
-    loading.classList.remove("display");
-}
 
-document.getElementById("request").addEventListener('submit', async function (e) {
-    e.preventDefault();
+document.querySelector('form').addEventListener('submit', async function (event) {
+    event.preventDefault();
     // console.log("hello1");
 
-    // Disable the button after submit
-    askButton.disabled = true;
-
-    let questInput = document.createElement('div');
-    questInput.classList.add("input");
-
     let question = document.createElement('p');
-    question.classList.add("question");
+    question.classList.add("question")
     question.innerHTML = input.value;
-
-    questInput.appendChild(question);
-
-    output.appendChild(questInput);
-
-    displayLoading();
+    output.appendChild(question);
 
     try {
         const response = await fetch(uri, {
@@ -54,6 +30,13 @@ document.getElementById("request").addEventListener('submit', async function (e)
         console.log("sending request")
 
         const data = await response.json();
+        // askButton.style.visibility = 'visible';
+        //
+        // if (!data){
+        //     askButton.style.visibility = 'hidden';
+        // }else {
+        //     askButton.style.visibility = 'visible';
+        // }
 
         const reply = data.ai;
 
@@ -64,19 +47,13 @@ document.getElementById("request").addEventListener('submit', async function (e)
 
         answer.innerHTML = reply;
 
-        hideLoading();
-
         newResponse.appendChild(answer);
 
         output.appendChild(newResponse);
 
     } catch (error) {
         console.error("Error occurred while fetching data:", error);
-    } finally {
-        // Enable button after try and catch 
-        askButton.disabled = false;
     }
+
+
 })
-
-
-
