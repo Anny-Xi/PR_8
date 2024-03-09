@@ -1,26 +1,102 @@
-main{
-    background: #97da97;
+body {
+    background: #e2d6cd;
+}
+
+main {
     width: 80vw;
     margin: 0 auto;
     padding: 1%;
 }
 
-#output{
+.header{
+    text-align: center;
+}
+
+.form{
+
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 5%;
+}
+#input {
+    width: 100%;
+    height: 10%;
+    padding: 15px 22px;
+    box-sizing: border-box;
+    border: 4px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    resize: none;
+    margin-top: 5%;
+}
+
+
+
+.button {
+    background-color: rgb(175, 241, 175);
+    border-color: rgb(175, 241, 175);
+    font-size: 16px;
+    margin: 0;
+    padding: 15px 15px;
+    float: right;
+}
+
+.button:hover {
+    background-color: white;
+}
+
+#output {
     background: white;
     padding: 0 1%;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
 }
 
-.question{
+.question {
     border-style: solid;
-    border-width: 10px;
+    border-width: 5px;
     border-color: black;
+    border-radius: 5%;
     margin: 10px 0;
+    max-width: 90%;
+    min-width: fit-content;
+    float: right;
+    padding: 1%;
 }
 
-.answer{
+.answer {
     border-style: solid;
-    border-width: 10px;
-    border-color: red;
+    border-width: 5px;
+    border-radius: 2%;
+    border-color: rgb(183, 241, 209);
     margin: 10px 0;
+    max-width: 90%;
+    padding: 1%;
+    float: left;
 }
 
+#loading {
+    width: 2rem;
+    height: 2rem;
+    border: 5px solid #f3f3f3;
+    border-top: 6px solid #ee7d32;
+    border-radius: 100%;
+    margin: auto;
+    display: none;
+    animation: spin 1s infinite linear;
+}
+
+#loading.display {
+    display: block;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
