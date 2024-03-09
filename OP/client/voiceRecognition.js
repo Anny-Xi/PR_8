@@ -1,22 +1,31 @@
 const startButton = document.getElementById('startButton');
-const outputDiv = document.getElementById('output');
+const outputDiv = document.getElementById('input');
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition);
 
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
 recognition.lang = 'en-US';
+recognition.interimResults = true;
 
-recognition.onstart = () => {
-    startButton.innerText = 'Listening...';
-};
 
-recognition.onresult = (event) => {
+recognition.onresult = function(event) {
     const transcript = event.results[0][0].transcript;
-    outputDiv.innerText = transcript;
-};
+    console.log(transcript);
+    outputDiv.innerText = " " + transcript;
+}
 
-recognition.onend = () => {
-    startButton.innerText = 'Start Voice Input';
-};
+recognition.onend = function() {
+    startButton.textContent = "Start Recording";
+}
 
-startButton.addEventListener('click', () => {
-    recognition.start();
+startButton.addEventListener('click', function() {
+    if (recognition.recording) {
+        setTimeout(() => {
+            recognition.stop();
+        }, 5000);
+        startButton.textContent = "Start Recording";
+    } else {
+        recognition.start();
+        startButton.textContent = "Stop Recording";
+        outputDiv.textContent = "Listening...";
+    }
 });
+

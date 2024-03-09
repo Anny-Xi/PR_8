@@ -4,7 +4,7 @@ const input = document.getElementById("input");
 const askButton = document.getElementById("ask-advice");
 const loading = document.getElementById("loading");
 
-
+//loading function
 function displayLoading() {
     loading.classList.add("display");
     // To stop loading after some time
@@ -12,7 +12,6 @@ function displayLoading() {
         loading.classList.remove("display");
     }, 10000);
 }
-
 // hiding loading 
 function hideLoading() {
     loading.classList.remove("display");
