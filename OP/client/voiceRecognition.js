@@ -20,7 +20,7 @@ startButton.addEventListener('click', function() {
     if (recognition.recording) {
         setTimeout(() => {
             recognition.stop();
-        }, 5000);
+        }, 9000);
         startButton.textContent = "Start Recording";
     } else {
         recognition.start();
