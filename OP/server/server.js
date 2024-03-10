@@ -1,8 +1,9 @@
 // express
 import express from 'express';
 
-// communicatie met GPT
+// Import LLM
 import { ChatOpenAI } from "@langchain/openai"
+import { ChatAnthropic } from "@langchain/anthropic";
 
 const controller = new AbortController();
 
@@ -13,13 +14,17 @@ const messages = [
 ];
 
 
-const model = new ChatOpenAI({
+const modelOpenAi  = new ChatOpenAI({
     azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
     azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
     azureOpenAIApiInstanceName: process.env.INSTANCE_NAME,
     azureOpenAIApiDeploymentName: process.env.ENGINE_NAME,
 })
 
+const modelAnthropic = new ChatAnthropic({
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+    modelName: "claude-3-sonnet-20240229",
+});
 
 const app = express();
 app.use(express.json());
@@ -53,7 +58,7 @@ app.post('/', async (req, res) => {
         }, 3000);
 
         messages.push(["human", advice]);
-        const reply = await model.invoke(messages) // await must be there
+        const reply = await modelOpenAi.invoke(messages) // await must be there
 
         console.log(reply)
 
@@ -78,6 +83,46 @@ app.post('/', async (req, res) => {
     }
 });
 
+app.get('/anthropic', async (req, res) => {
+    const result = await modelAnthropic.invoke("Waarom is lucht blauw?");
+    console.log(result)
+});
+
+app.post('/anthropic', async (req, res) => {
+    
+    const advice = req.body.advice;// Destructure only required fields
+
+    async function callAnthropicAI(advice) {
+
+        setTimeout(() => {
+            controller.abort();
+        }, 3000);
+
+        messages.push(["human", advice]);
+        const reply = await modelAnthropic.invoke(messages) // await must be there
+
+        console.log(reply)
+
+        messages.push(["ai", reply.content]);
+
+        console.log(messages)
+        console.log(reply.content)
+        res.json({ ai: reply.content })
+    }
+
+    try {
+        // Validate incoming data
+        if (!advice) {
+            return res.status(400).json({ message: 'give us your require please' });
+        }
+
+        callAnthropicAI(advice)
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: error.message });
+    }
+});
 
 app.listen(process.env.PORT, () => {
     console.log(`Server listening on Port ${process.env.PORT}`);

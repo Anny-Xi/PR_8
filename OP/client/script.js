@@ -1,7 +1,7 @@
-const uri = "http://localhost:8000/";
+let uri = "http://localhost:8000/";
 const output = document.getElementById("output");
 const input = document.getElementById("input");
-const askButton = document.getElementById("ask-advice");
+const askButton = document.querySelector(".ask-ai");
 const loading = document.getElementById("loading");
 
 //loading function
@@ -19,7 +19,8 @@ function hideLoading() {
 
 document.getElementById("request").addEventListener('submit', async function (e) {
     e.preventDefault();
-    // console.log("hello1");
+
+    console.log(e.submitter.value);
 
     // Disable the button after submit
     askButton.disabled = true;
@@ -37,6 +38,10 @@ document.getElementById("request").addEventListener('submit', async function (e)
 
     displayLoading();
 
+    if (e.submitter.value === "submit-anthropic") {
+        uri = "http://localhost:8000/anthropic";
+    }
+
     try {
         const response = await fetch(uri, {
             method: "POST",
@@ -46,7 +51,6 @@ document.getElementById("request").addEventListener('submit', async function (e)
             },
             body: JSON.stringify({
                 "advice": input.value,
-                // "prompt": human_prompt.value,//additional for second input
             }),
         });
 
