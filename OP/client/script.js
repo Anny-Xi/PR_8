@@ -1,4 +1,4 @@
-let uri = "http://localhost:8000/";
+let uri = " ";
 const output = document.getElementById("output");
 const input = document.getElementById("input");
 const askButton = document.querySelector(".ask-ai");
@@ -40,8 +40,11 @@ document.getElementById("request").addEventListener('submit', async function (e)
 
     if (e.submitter.value === "submit-anthropic") {
         uri = "http://localhost:8000/anthropic";
+    }else if (e.submitter.value === "submit-openAi") {
+        uri = "http://localhost:8000/"
     }
 
+    console.log(uri)
     try {
         const response = await fetch(uri, {
             method: "POST",
