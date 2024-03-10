@@ -55,12 +55,6 @@ document.getElementById("request").addEventListener('submit', async function (e)
 
     displayLoading();
 
-    if (e.submitter.value === "submit-anthropic") {
-        uri = "http://localhost:8000/anthropic";
-    } else if (e.submitter.value === "submit-openAi") {
-        uri = "http://localhost:8000/"
-    }
-
     console.log(uri)
     try {
         const response = await fetch(uri, {
