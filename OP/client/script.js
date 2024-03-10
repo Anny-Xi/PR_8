@@ -1,7 +1,8 @@
-let uri = " ";
+let uri = "http://localhost:8000/";
 const output = document.getElementById("output");
 const input = document.getElementById("input");
-const askButton = document.querySelector(".ask-ai");
+const askButton = document.getElementById("ask-ai");
+const switchButton = document.getElementById("changeAI")
 const loading = document.getElementById("loading");
 
 //loading function
@@ -16,6 +17,22 @@ function displayLoading() {
 function hideLoading() {
     loading.classList.remove("display");
 }
+
+switchButton.addEventListener('click', function(e) {
+    if (uri === "http://localhost:8000/") {
+        uri = "http://localhost:8000/anthropic";
+        console.log(uri);
+
+        askButton.innerText = "Ask advice Anthropic";
+    } else {
+        uri = "http://localhost:8000/"
+        console.log(uri)
+
+        askButton.innerText = "Ask Open AI";
+    }
+});
+
+
 
 document.getElementById("request").addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -40,7 +57,7 @@ document.getElementById("request").addEventListener('submit', async function (e)
 
     if (e.submitter.value === "submit-anthropic") {
         uri = "http://localhost:8000/anthropic";
-    }else if (e.submitter.value === "submit-openAi") {
+    } else if (e.submitter.value === "submit-openAi") {
         uri = "http://localhost:8000/"
     }
 
@@ -84,7 +101,6 @@ document.getElementById("request").addEventListener('submit', async function (e)
             speech.text = text;
             window.speechSynthesis.speak(speech);
         }
-
 
     } catch (error) {
         console.error("Error occurred while fetching data:", error);

@@ -39,10 +39,6 @@ app.use(function (req, res, next) {
 });
 
 
-// console.log("hello world");
-
-// console.log(process.env.AZURE_OPENAI_API_KEY);
-
 app.get('/', async(req,res)=> {
     res.send('Hello my CHAT gpt');
 });
