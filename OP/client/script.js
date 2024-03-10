@@ -1,4 +1,4 @@
-const uri = "https://refactored-bassoon-gjj4jv9wwr6c9q6r-8000.app.github.dev/";
+const uri = "http://localhost:8000/";
 const output = document.getElementById("output");
 const input = document.getElementById("input");
 const askButton = document.getElementById("ask-advice");
